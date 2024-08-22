@@ -5,18 +5,20 @@ import { Op } from "sequelize";
 // Get all books, excluding borrowed ones
 export const getBooks = async (req, res) => {
   try {
-    const borrowedBooks = await BorrowedBook.findAll({
-      attributes: ["bookCode"],
-    });
-    const borrowedBookCodes = borrowedBooks.map((b) => b.bookCode);
+    // const borrowedBooks = await BorrowedBook.findAll({
+    //   attributes: ["bookCode"],
+    // });
+    // const borrowedBookCodes = borrowedBooks.map((b) => b.bookCode);
 
-    const books = await Book.findAll({
-      where: {
-        code: {
-          [Op.notIn]: borrowedBookCodes,
-        },
-      },
-    });
+    const books = await Book.findAll(
+    // {
+    //   where: {
+    //     code: {
+    //       [Op.notIn]: borrowedBookCodes,
+    //     },
+    //   },
+    // }
+  );
     res.json(books);
   } catch (error) {
     res.status(500).json({ error: "Failed to retrieve books" });
