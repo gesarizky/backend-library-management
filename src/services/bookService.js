@@ -51,10 +51,17 @@ export const returnBookService = async (memberCode, bookCode) => {
   try {
     const book = await Book.findByPk(bookCode);
     const borrowedBook = await BorrowedBook.findOne({
-      where: { memberCode, bookCode },
+      where: {
+        memberCode,
+        bookCode,
+        returnDate: null, // Menemukan entri yang belum dikembalikan
+      },
     });
+
     if (!borrowedBook) {
-      throw new Error("Book was not borrowed by this member");
+      throw new Error(
+        "Book was not borrowed by this member or has already been returned."
+      );
     }
 
     const borrowDate = new Date(borrowedBook.borrowDate);
@@ -71,10 +78,8 @@ export const returnBookService = async (memberCode, bookCode) => {
     book.stock += 1;
     await book.save();
 
-    await BorrowedBook.update(
-      { returnDate },
-      { where: { memberCode, bookCode } }
-    );
+    // Update the specific borrowed book record
+    await borrowedBook.update({ returnDate });
 
     setTimeout(async () => {
       await Member.update({ penalty: false }, { where: { code: memberCode } });
@@ -82,7 +87,6 @@ export const returnBookService = async (memberCode, bookCode) => {
 
     return { message: "Book returned successfully" };
   } catch (error) {
-    // console.log("~ File services/bookService.js returnBookService :", error);
     throw error;
   }
 };
