@@ -64,26 +64,20 @@ This project is a simple Library Management System built using **ExpressJS** and
    DATABASE_LOGGING = false
    ```
 
-4. Run the database migrations:
+4. Start the server:
 
    ```bash
-   npm run migrate
+   npm run start
    ```
 
-5. Start the server:
-
-   ```bash
-   npm start
-   ```
-
-6. The server will run on `http://localhost:3000`.
+5. The server will run on `http://localhost:3000`.
 
 ### Running Tests
 
 To run unit tests:
 
 ```bash
-npm test
+npm run test
 ```
 
 ### API Documentation
